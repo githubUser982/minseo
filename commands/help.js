@@ -7,16 +7,30 @@ module.exports = {
    data: new SlashCommandBuilder()
       .setName('help')
       .setDescription('Get help!'),
-      
-         
+
+
 
 
    async execute(interaction) {
       // This is where stuff actually happens!
-      
+      // interaction.deferReply()
+      // Check that I have required permissions
 
+      let neededPerms = ["SEND_MESSAGES", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS", "ADD_REACTIONS", "READ_MESSAGE_HISTORY",]
 
-      interaction.reply(await bUtils.embedify(`Help & Information`, `
+      let permsOkay = true
+      let missingPerms = []
+
+      for (let i = 0; i < neededPerms.length; i++) {
+         if (!interaction.guild.members.me.permissions.has(neededPerms[i])) {
+            permsOkay = false
+            missingPerms.push(neededPerms[i])
+         }
+      }
+
+      if (!permsOkay) interaction.channel.send("Configuration problem, I am missing permissions. Give me: " + missingPerms.join(", "))
+
+      interaction.channel.send(await bUtils.embedify(`Help & Information`, `
       Minseo the shy giveaway bot is here to help you with your giveaways!
 
       **Commands**
@@ -32,8 +46,8 @@ module.exports = {
 
       ` ))
 
-
+      await interaction.reply("||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​|| ")
 
    }
-   
+
 };

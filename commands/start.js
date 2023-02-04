@@ -51,10 +51,11 @@ module.exports = {
       const duration = interaction.options.getInteger('duration');
       const durationType = interaction.options.getString('duration-type');
       let channel = interaction.options.getChannel('channel');
+      if (!channel) channel = interaction.channel;
       const pingrole = interaction.options.getString('ping-role-id');
 
       if (!channel.isTextBased()) return interaction.reply({ content: 'You can only start giveaways in text channels!', ephemeral: true });
-      if (!channel) channel = interaction.channel;
+      
 
       if (!prize) return interaction.reply({ content: 'You must provide a prize!', ephemeral: true });
       if (!winners) return interaction.reply({ content: 'You must provide a number of winners!', ephemeral: true });

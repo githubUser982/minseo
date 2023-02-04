@@ -1,8 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-
 // Note that big S Sequelize is the library, small s sequelize is the object of your databases
-
 const sequelize = new Sequelize('database', 'user', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
