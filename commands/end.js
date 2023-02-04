@@ -20,7 +20,7 @@ module.exports = {
       const messageID = interaction.options.getString('message-id');
       if (!messageID) return interaction.reply({ content: 'You must provide a message ID!', ephemeral: true });
 
-      const giveaway = await giveaways.findOne({ messageID: messageID });
+      const giveaway = await giveaways.findOne({where:  {  messageID: messageID } });
       if (!giveaway) return interaction.reply({ content: 'I could not find a giveaway with that message ID!', ephemeral: true });
 
       giveaway.ended = true;

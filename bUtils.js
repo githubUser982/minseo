@@ -27,11 +27,16 @@ let bUtils = {
          seconds = parseInt((duration / 1000) % 60),
          minutes = parseInt((duration / (1000 * 60)) % 60),
          hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+         days = Math.floor((duration / (1000 * 60 * 60 * 24)))
+
 
       hours = (hours < 10) ? "0" + hours : hours;
       minutes = (minutes < 10) ? "0" + minutes : minutes;
       seconds = (seconds < 10) ? "0" + seconds : seconds;
 
+      if (days > 0) {
+         return days + " days, " + hours + "h " + minutes + "m " + seconds + "s";
+      }
       return hours + ":" + minutes + ":" + seconds
    },
 
@@ -46,6 +51,10 @@ let bUtils = {
                .setCustomId(`${dbGiveaway.id}`)
                .setLabel(lebalOptions[Math.floor(Math.random() * lebalOptions.length)])
                .setStyle(ButtonStyle.Primary),
+               new ButtonBuilder()
+               .setCustomId(`${dbGiveaway.id}-leave`)
+               .setLabel("Leave...")
+               .setStyle(ButtonStyle.Primary),
          );
 
       let titlePing
@@ -56,13 +65,15 @@ let bUtils = {
       let timeRemaining = dbGiveaway.endTime - Date.now()
       timeRemaining = this.msToTime(timeRemaining)
 
+      let peopleCount = await giveawayParticipants.count({ where: { giveawayID: dbGiveaway.id } });
+
       const giveawayMessage = {
          //ping a role here
          content: titlePing,
          embeds: [
             {
                title: `Giveaway for ${dbGiveaway.prize}!`,
-               description: `Press the button to enter!\nHosted by: <@${dbGiveaway.creator}> \n Winners: ${dbGiveaway.winners}`,
+               description: `Press the button to enter!\nHosted by: <@${dbGiveaway.creator}> \n Winners: ${dbGiveaway.winners}\n Participants: ${peopleCount}`,
                color: 16770560,
                footer: {
                   text: `Ends ${timeRemaining} from now...`
@@ -72,7 +83,15 @@ let bUtils = {
       }
 
       return giveawayMessage
-   }
+   },
+
+
+
+   DM: async function (userID, messageContent) {
+      const DMuser = await botClient.users.fetch(userID).catch(() => { })
+      if (!DMuser) return
+      DMuser.send(messageContent).catch(() => { })
+   },
    
 
 
